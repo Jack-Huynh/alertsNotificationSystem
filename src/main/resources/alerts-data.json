@@ -1,0 +1,20 @@
+{
+  "persons": [
+    { "firstName":"Alice", "lastName":"Smith", "address":"123 Main St", "city":"HCM", "age": 32, "phone":"555-123-4567", "email":"alice@email.com" },
+    { "firstName":"Bob", "lastName":"Johnson", "address":"456 Oak St", "city":"HCM", "age": 27, "phone":"555-987-6543", "email":"bob@email.com" },
+    { "firstName":"Charlie", "lastName":"Brown", "address":"789 Pine St", "city":"Halifax","age": 10, "phone":"555-567-8901", "email":"charlie@email.com" },
+    { "firstName":"David", "lastName":"Williams", "address":"101 Elm St", "city":"Halifax", "age": 54, "phone":"555-234-5678", "email":"david@email.com" },
+    { "firstName":"Eva", "lastName":"Taylor", "address":"123 Main St", "city":"HCM", "age": 36, "phone":"555-876-5432", "email":"eva@email.com" },
+    { "firstName":"Frank", "lastName":"Miller", "address":"101 Elm St", "city":"Halifax", "age": 22, "phone":"555-345-6789", "email":"frank@email.com" },
+    { "firstName":"Grace", "lastName":"Miller", "address":"101 Elm St", "city":"Halifax", "age": 10, "phone":"555-654-3210", "email":"grace@email.com" },
+    { "firstName":"Henry", "lastName":"Clark", "address":"789 Pine St", "city":"Halifax", "age": 32, "phone":"555-432-1098", "email":"henry@email.com" },
+    { "firstName":"Oliver", "lastName":"Johnson", "address":"456 Oak St", "city":"HCM", "age": 17, "phone":"555-111-2222", "email":"oliver@email.com" },
+    { "firstName":"Sophie", "lastName":"Smith", "address":"123 Main St", "city":"HCM", "age": 12, "phone":"555-333-4444", "email":"sophie@email.com" }
+  ],
+  "firestations": [
+    { "address":"123 Main St", "station":"1" },
+    { "address":"456 Oak St", "station":"2" },
+    { "address":"789 Pine St", "station":"1" },
+    { "address":"101 Elm St", "station":"2" }
+  ]
+}
