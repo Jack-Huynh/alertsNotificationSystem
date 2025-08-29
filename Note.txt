@@ -1,0 +1,1 @@
+Project nay co ban la display REST API theo dang truy van bang web link v thi nen thiet ke 1 trang chinh Home duy nhat cung cac button va ng dung co the lua chon muon xem cai j thi click vao thay vi cu phai xem thong tin theo web link

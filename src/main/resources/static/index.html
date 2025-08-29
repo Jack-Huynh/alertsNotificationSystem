@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SafetyNet Alerts Home</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+section { margin-bottom: 2em; }
+pre { background: #f0f0f0; padding: 10px; }
+</style>
+</head>
+<body>
+<h1>SafetyNet Alerts</h1>
+<p>Select an endpoint and provide the required parameters.</p>
+
+<section>
+<h2>Firestation Information</h2>
+<input type="number" id="firestationNumber" placeholder="Station Number" />
+<button onclick="fetchFirestation()">Get Info</button>
+<pre id="firestationOutput"></pre>
+</section>
+
+<section>
+<h2>Child Alert</h2>
+<input type="text" id="childAddress" placeholder="Address" />
+<button onclick="fetchChildAlert()">Get Children</button>
+<pre id="childAlertOutput"></pre>
+</section>
+
+<section>
+<h2>Phone Alert</h2>
+<input type="number" id="phoneStation" placeholder="Station Number" />
+<button onclick="fetchPhoneAlert()">Get Phones</button>
+<pre id="phoneAlertOutput"></pre>
+</section>
+
+<section>
+<h2>Fire Information</h2>
+<input type="text" id="fireAddress" placeholder="Address" />
+<button onclick="fetchFireInfo()">Get Info</button>
+<pre id="fireOutput"></pre>
+</section>
+
+<section>
+<h2>Flood Stations</h2>
+<input type="text" id="floodStations" placeholder="Stations e.g. 1,2" />
+<button onclick="fetchFlood()">Get Info</button>
+<pre id="floodOutput"></pre>
+</section>
+
+<section>
+<h2>Person Information</h2>
+<input type="text" id="personFirstName" placeholder="First Name" />
+<input type="text" id="personLastName" placeholder="Last Name" />
+<button onclick="fetchPersonInfo()">Get Info</button>
+<pre id="personInfoOutput"></pre>
+</section>
+
+<section>
+<h2>Community Email</h2>
+<input type="text" id="communityCity" placeholder="City" />
+<button onclick="fetchCommunityEmail()">Get Emails</button>
+<pre id="communityEmailOutput"></pre>
+</section>
+
+<script>
+function display(obj, id){ document.getElementById(id).textContent = JSON.stringify(obj, null, 2); }
+
+function fetchFirestation(){
+  const station = document.getElementById('firestationNumber').value;
+  fetch('/firestation?stationNumber=' + encodeURIComponent(station))
+    .then(r => r.json())
+    .then(data => display(data, 'firestationOutput'));
+}
+function fetchChildAlert(){
+  const address = document.getElementById('childAddress').value;
+  fetch('/childAlert?address=' + encodeURIComponent(address))
+    .then(r => r.json())
+    .then(data => display(data, 'childAlertOutput'));
+}
+function fetchPhoneAlert(){
+  const station = document.getElementById('phoneStation').value;
+  fetch('/phoneAlert?firestation=' + encodeURIComponent(station))
+    .then(r => r.json())
+    .then(data => display(data, 'phoneAlertOutput'));
+}
+function fetchFireInfo(){
+  const address = document.getElementById('fireAddress').value;
+  fetch('/fire?address=' + encodeURIComponent(address))
+    .then(r => r.json())
+    .then(data => display(data, 'fireOutput'));
+}
+function fetchFlood(){
+  const stations = document.getElementById('floodStations').value;
+  fetch('/flood/stations?stations=' + encodeURIComponent(stations))
+    .then(r => r.json())
+    .then(data => display(data, 'floodOutput'));
+}
+function fetchPersonInfo(){
+  const first = document.getElementById('personFirstName').value;
+  const last = document.getElementById('personLastName').value;
+  fetch('/personInfo?firstName=' + encodeURIComponent(first) + '&lastName=' + encodeURIComponent(last))
+    .then(r => r.json())
+    .then(data => display(data, 'personInfoOutput'));
+}
+function fetchCommunityEmail(){
+  const city = document.getElementById('communityCity').value;
+  fetch('/communityEmail?city=' + encodeURIComponent(city))
+    .then(r => r.json())
+    .then(data => display(data, 'communityEmailOutput'));
+}
+</script>
+</body>
+</html>
