@@ -38,8 +38,6 @@ SafetyNet Alerts is a modern Spring Boot application designed to provide emergen
 
 3. **Access the application**
    - Web Interface: [http://localhost:8080](http://localhost:8080)
-   - H2 Database Console: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
-   - Health Check: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
 
 ## 📚 API Endpoints
 
@@ -130,28 +128,6 @@ private PersonService personService; // Depends on abstraction
 @Autowired 
 private FireStationService fireStationService; // Not concrete classes
 ```
-
-### Project Structure
-```
-src/
-├── main/
-│   ├── java/com/example/alert/
-│   │   ├── controller/          # REST API Controllers
-│   │   ├── service/             # Business Logic Services
-│   │   ├── repository/          # Data Access Layer
-│   │   ├── model/               # JPA Entities
-│   │   │   └── DTO/             # Data Transfer Objects
-│   │   ├── mapper/              # MapStruct Mappers
-│   │   └── util/                # Utility Classes
-│   └── resources/
-│       ├── alerts-data.json     # Sample Data
-│       ├── application.properties
-│       └── static/
-│           └── index.html       # Interactive Web Interface
-└── test/                        # Unit Tests
-```
-
-## 🔧 Configuration
 
 ## 📋 Sample Data
 
