@@ -2,113 +2,640 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>SafetyNet Alerts Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafetyNet Alerts - API Demo Platform</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; }
-section { margin-bottom: 2em; }
-pre { background: #f0f0f0; padding: 10px; }
+* { box-sizing: border-box; }
+body { 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  margin: 0; 
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  font-weight: 300;
+}
+
+.api-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  padding: 30px;
+}
+
+.api-section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.api-section h2 {
+  color: #333;
+  margin: 0 0 15px 0;
+  font-size: 1.3em;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.btn:hover {
+  background: #5a6fd8;
+}
+
+.btn-example {
+  background: #28a745;
+  font-size: 12px;
+}
+
+.output {
+  background: #2d3748;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  margin-top: 10px;
+}
+
+.output:empty::before {
+  content: "Results will appear here...";
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* API URL Display */
+.api-url {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 15px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.api-url code {
+  background: #2d3748;
+  color: #68d391;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  flex: 1;
+  word-break: break-all;
+}
+
+.btn-copy {
+  background: #4a5568;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.btn-copy:hover {
+  background: #2d3748;
+}
+
+/* Tabbed Interface */
+.output-tabs {
+  display: flex;
+  border-bottom: 1px solid #4a5568;
+  background: #1a202c;
+  border-radius: 6px 6px 0 0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-radius: 6px 6px 0 0;
+}
+
+.tab-btn:hover {
+  background: #2d3748;
+  color: #e2e8f0;
+}
+
+.tab-btn.active {
+  background: #4299e1;
+  color: white;
+}
+
+.tab-content {
+  min-height: 200px;
+}
+
+.tab-pane {
+  display: none;
+  padding: 15px;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.json-output {
+  color: #e2e8f0;
+  background: transparent;
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+}
+
+.readable-output {
+  color: #2d3748;
+  background: #f7fafc;
+  border-radius: 6px;
+  padding: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .api-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 <body>
-<h1>SafetyNet Alerts</h1>
-<p>Select an endpoint and provide the required parameters.</p>
+<div class="container">
+  <div class="header">
+    <h1>🚨 SafetyNet Alerts</h1>
+    <p>Interactive API Demo Platform - Try all 7 REST endpoints!</p>
+  </div>
+  
+  <div class="api-grid">
+    <!-- 1. Firestation Information -->
+    <div class="api-section">
+      <h2>🚒 Firestation Information</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get people serviced by fire station</p>
+      <div class="api-url">
+        <strong>🔗 REST API:</strong> 
+        <code id="firestationUrl">http://localhost:8080/firestation?stationNumber=1</code>
+        <button class="btn-copy" onclick="copyToClipboard('firestationUrl')">📋</button>
+      </div>
+      <div class="input-group">
+        <input type="number" id="firestationNumber" placeholder="Station Number (1 or 2)" oninput="updateApiUrl('firestationNumber', 'firestationUrl', 'http://localhost:8080/firestation?stationNumber=')" />
+      </div>
+      <button class="btn" onclick="fetchFirestation()">🔍 Search Station</button>
+      <button class="btn btn-example" onclick="setExample('firestationNumber', '1'); fetchFirestation();">Try Example</button>
+      <div class="output" id="firestationOutput"></div>
+    </div>
 
-<section>
-<h2>Firestation Information</h2>
-<input type="number" id="firestationNumber" placeholder="Station Number" />
-<button onclick="fetchFirestation()">Get Info</button>
-<pre id="firestationOutput"></pre>
-</section>
+    <!-- 2. Child Alert -->
+    <div class="api-section">
+      <h2>👶 Child Alert</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get children at specific address</p>
+      <div class="api-url">
+        <strong>🔗 REST API:</strong> 
+        <code id="childAlertUrl">http://localhost:8080/childAlert?address=123 Main St</code>
+        <button class="btn-copy" onclick="copyToClipboard('childAlertUrl')">📋</button>
+      </div>
+      <div class="input-group">
+        <input type="text" id="childAddress" placeholder="Address" oninput="updateApiUrl('childAddress', 'childAlertUrl', 'http://localhost:8080/childAlert?address=')" />
+      </div>
+      <button class="btn" onclick="fetchChildAlert()">🔍 Find Children</button>
+      <button class="btn btn-example" onclick="setExample('childAddress', '123 Main St'); fetchChildAlert();">Try Example</button>
+      <div class="output" id="childAlertOutput"></div>
+    </div>
 
-<section>
-<h2>Child Alert</h2>
-<input type="text" id="childAddress" placeholder="Address" />
-<button onclick="fetchChildAlert()">Get Children</button>
-<pre id="childAlertOutput"></pre>
-</section>
+    <!-- 3. Phone Alert -->
+    <div class="api-section">
+      <h2>📱 Phone Alert</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get phone numbers for station jurisdiction</p>
+      <div class="input-group">
+        <input type="number" id="phoneStation" placeholder="Station Number" oninput="updateAllApiUrls()" />
+      </div>
+      <div class="api-url">
+        <strong>API URL:</strong> 
+        <code id="phoneAlertUrl">http://localhost:8080/phoneAlert?firestation=2</code>
+        <button class="btn-copy" onclick="copyToClipboard('phoneAlertUrl')">📋</button>
+      </div>
+      <button class="btn" onclick="fetchPhoneAlert()">📞 Get Phone Numbers</button>
+      <button class="btn btn-example" onclick="setExample('phoneStation', '2'); fetchPhoneAlert();">Try Example</button>
+      <div class="output" id="phoneAlertOutput"></div>
+    </div>
 
-<section>
-<h2>Phone Alert</h2>
-<input type="number" id="phoneStation" placeholder="Station Number" />
-<button onclick="fetchPhoneAlert()">Get Phones</button>
-<pre id="phoneAlertOutput"></pre>
-</section>
+    <!-- 4. Fire Information -->
+    <div class="api-section">
+      <h2>🔥 Fire Emergency</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get fire station and residents for address</p>
+      <div class="input-group">
+        <input type="text" id="fireAddress" placeholder="Emergency Address" oninput="updateAllApiUrls()" />
+      </div>
+      <div class="api-url">
+        <strong>API URL:</strong> 
+        <code id="fireUrl">http://localhost:8080/fire?address=456 Oak St</code>
+        <button class="btn-copy" onclick="copyToClipboard('fireUrl')">📋</button>
+      </div>
+      <button class="btn" onclick="fetchFireInfo()">🚨 Emergency Info</button>
+      <button class="btn btn-example" onclick="setExample('fireAddress', '456 Oak St'); fetchFireInfo();">Try Example</button>
+      <div class="output" id="fireOutput"></div>
+    </div>
 
-<section>
-<h2>Fire Information</h2>
-<input type="text" id="fireAddress" placeholder="Address" />
-<button onclick="fetchFireInfo()">Get Info</button>
-<pre id="fireOutput"></pre>
-</section>
+    <!-- 5. Flood Stations -->
+    <div class="api-section">
+      <h2>🌊 Flood Alert</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get households by station numbers</p>
+      <div class="input-group">
+        <input type="text" id="floodStations" placeholder="Stations (e.g., 1,2)" oninput="updateAllApiUrls()" />
+      </div>
+      <div class="api-url">
+        <strong>API URL:</strong> 
+        <code id="floodUrl">http://localhost:8080/flood/stations?stations=1,2</code>
+        <button class="btn-copy" onclick="copyToClipboard('floodUrl')">📋</button>
+      </div>
+      <button class="btn" onclick="fetchFlood()">🌊 Flood Info</button>
+      <button class="btn btn-example" onclick="setExample('floodStations', '1,2'); fetchFlood();">Try Example</button>
+      <div class="output" id="floodOutput"></div>
+    </div>
 
-<section>
-<h2>Flood Stations</h2>
-<input type="text" id="floodStations" placeholder="Stations e.g. 1,2" />
-<button onclick="fetchFlood()">Get Info</button>
-<pre id="floodOutput"></pre>
-</section>
+    <!-- 6. Person Information -->
+    <div class="api-section">
+      <h2>👤 Person Lookup</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get detailed person information</p>
+      <div class="input-group">
+        <input type="text" id="personFirstName" placeholder="First Name" oninput="updateAllApiUrls()" />
+        <input type="text" id="personLastName" placeholder="Last Name" oninput="updateAllApiUrls()" />
+      </div>
+      <div class="api-url">
+        <strong>API URL:</strong> 
+        <code id="personInfoUrl">http://localhost:8080/personInfo?firstName=Alice&lastName=Smith</code>
+        <button class="btn-copy" onclick="copyToClipboard('personInfoUrl')">📋</button>
+      </div>
+      <button class="btn" onclick="fetchPersonInfo()">👤 Get Person Info</button>
+      <button class="btn btn-example" onclick="setExample('personFirstName', 'Alice'); setExample('personLastName', 'Smith'); fetchPersonInfo();">Try Example</button>
+      <div class="output" id="personInfoOutput"></div>
+    </div>
 
-<section>
-<h2>Person Information</h2>
-<input type="text" id="personFirstName" placeholder="First Name" />
-<input type="text" id="personLastName" placeholder="Last Name" />
-<button onclick="fetchPersonInfo()">Get Info</button>
-<pre id="personInfoOutput"></pre>
-</section>
-
-<section>
-<h2>Community Email</h2>
-<input type="text" id="communityCity" placeholder="City" />
-<button onclick="fetchCommunityEmail()">Get Emails</button>
-<pre id="communityEmailOutput"></pre>
-</section>
+    <!-- 7. Community Email -->
+    <div class="api-section">
+      <h2>📧 Community Emails</h2>
+      <p style="color: #666; margin: 10px 0; font-style: italic;">Get all emails for city residents</p>
+      <div class="input-group">
+        <input type="text" id="communityCity" placeholder="City Name" oninput="updateAllApiUrls()" />
+      </div>
+      <div class="api-url">
+        <strong>API URL:</strong> 
+        <code id="communityEmailUrl">http://localhost:8080/communityEmail?city=HCM</code>
+        <button class="btn-copy" onclick="copyToClipboard('communityEmailUrl')">📋</button>
+      </div>
+      <button class="btn" onclick="fetchCommunityEmail()">📧 Get Community Emails</button>
+      <button class="btn btn-example" onclick="setExample('communityCity', 'HCM'); fetchCommunityEmail();">Try Example</button>
+      <div class="output" id="communityEmailOutput"></div>
+    </div>
+  </div>
+</div>
 
 <script>
-function display(obj, id){ document.getElementById(id).textContent = JSON.stringify(obj, null, 2); }
+function setExample(elementId, value) {
+  document.getElementById(elementId).value = value;
+  updateAllApiUrls();
+}
+
+// Function to update API URL dynamically
+function updateApiUrl(inputId, urlId, baseUrl) {
+  const inputValue = document.getElementById(inputId).value;
+  const urlElement = document.getElementById(urlId);
+  
+  if (inputValue) {
+    urlElement.textContent = baseUrl + encodeURIComponent(inputValue);
+  } else {
+    const defaultValues = {
+      'firestationNumber': '1',
+      'childAddress': '123 Main St',
+      'phoneStation': '2',
+      'fireAddress': '456 Oak St',
+      'floodStations': '1,2',
+      'communityCity': 'HCM'
+    };
+    urlElement.textContent = baseUrl + encodeURIComponent(defaultValues[inputId] || '');
+  }
+}
+
+// Function to update all API URLs
+function updateAllApiUrls() {
+  updateApiUrl('firestationNumber', 'firestationUrl', 'http://localhost:8080/firestation?stationNumber=');
+  updateApiUrl('childAddress', 'childAlertUrl', 'http://localhost:8080/childAlert?address=');
+  updateApiUrl('phoneStation', 'phoneAlertUrl', 'http://localhost:8080/phoneAlert?firestation=');
+  updateApiUrl('fireAddress', 'fireUrl', 'http://localhost:8080/fire?address=');
+  updateApiUrl('floodStations', 'floodUrl', 'http://localhost:8080/flood/stations?stations=');
+  updatePersonInfoUrl();
+  updateApiUrl('communityCity', 'communityEmailUrl', 'http://localhost:8080/communityEmail?city=');
+}
+
+// Special function for person info URL (requires two parameters)
+function updatePersonInfoUrl() {
+  const firstName = document.getElementById('personFirstName').value || 'Alice';
+  const lastName = document.getElementById('personLastName').value || 'Smith';
+  const urlElement = document.getElementById('personInfoUrl');
+  urlElement.textContent = `http://localhost:8080/personInfo?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`;
+}
+
+// Function to copy API URL to clipboard
+function copyToClipboard(urlId) {
+  const urlElement = document.getElementById(urlId);
+  const textToCopy = urlElement.textContent;
+  
+  navigator.clipboard.writeText(textToCopy).then(function() {
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = '✅';
+    button.style.background = '#28a745';
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.background = '#4a5568';
+    }, 1500);
+  }).catch(function(err) {
+    alert('API URL copied to clipboard!');
+  });
+}
+
+// Enhanced display function with tabbed interface
+function display(obj, id) { 
+  const element = document.getElementById(id);
+  try {
+    const jsonFormatted = JSON.stringify(obj, null, 2);
+    const humanReadable = formatHumanReadable(obj);
+    
+    element.innerHTML = `
+      <div class="output-tabs">
+        <button class="tab-btn active" onclick="showTab('${id}', 'json')">📋 JSON Response</button>
+        <button class="tab-btn" onclick="showTab('${id}', 'readable')">👁️ Human Readable</button>
+      </div>
+      <div class="tab-content">
+        <div id="${id}-json" class="tab-pane active">
+          <pre class="json-output">${jsonFormatted}</pre>
+        </div>
+        <div id="${id}-readable" class="tab-pane">
+          <div class="readable-output">${humanReadable}</div>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    element.textContent = 'Error displaying result: ' + error.message;
+  }
+}
+
+// Format data in human-readable way
+function formatHumanReadable(obj) {
+  if (!obj) return '<div>No data found</div>';
+  
+  if (Array.isArray(obj)) {
+    if (obj.length === 0) return '<div>No results found</div>';
+    
+    let html = '<div>';
+    obj.forEach((item, index) => {
+      if (typeof item === 'string') {
+        html += `<div><strong>${index + 1}.</strong> ${item}</div>`;
+      } else if (typeof item === 'object') {
+        html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
+          <strong>${item.firstName || ''} ${item.lastName || ''}</strong>
+          ${item.age ? ` (${item.age} years old)` : ''}
+          ${item.address ? `<br>📍 ${item.address}` : ''}
+          ${item.phone ? `<br>📞 ${item.phone}` : ''}
+          ${item.email ? `<br>📧 ${item.email}` : ''}
+        </div>`;
+      }
+    });
+    html += '</div>';
+    return html;
+  }
+  
+  if (typeof obj === 'object') {
+    // Handle Fire Emergency data structure: { "fireStation": [...], "persons": [...] }
+    if (obj.fireStation && obj.persons) {
+      let html = `<div>
+        <h4>🚨 Fire Emergency Information</h4>
+        <div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 8px; margin: 15px 0;">
+          <h5 style="margin: 0;">🚒 Responding Fire Station:</h5>`;
+      
+      if (Array.isArray(obj.fireStation) && obj.fireStation.length > 0) {
+        obj.fireStation.forEach(station => {
+          html += `<div>Station ${station.station} - ${station.address}</div>`;
+        });
+      }
+      html += `</div>`;
+      
+      if (obj.persons && obj.persons.length > 0) {
+        html += '<h4>👥 Residents at Location:</h4>';
+        obj.persons.forEach(person => {
+          html += `<div style="margin: 10px 0; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8f9fa;">
+            <strong>${person.firstName} ${person.lastName}</strong> (${person.age} years old)
+            <br>📞 ${person.phone}
+            <br>📧 ${person.email}
+            ${person.medications ? `<br>💊 Medications: ${person.medications}` : ''}
+            ${person.allergies ? `<br>⚠️ Allergies: ${person.allergies}` : ''}
+          </div>`;
+        });
+      }
+      return html;
+    }
+    
+    // Handle Flood Alert data structure: { "1": { "address1": [...], "address2": [...] }, "2": { ... } }
+    if (Object.keys(obj).every(key => /^\d+$/.test(key))) {
+      let html = `<div>
+        <h4>🌊 Flood Alert Information</h4>`;
+      
+      Object.keys(obj).forEach(stationNumber => {
+        html += `<div style="margin: 20px 0; padding: 15px; border: 2px solid #4299e1; border-radius: 8px; background: #ebf8ff;">
+          <h5 style="margin: 0 0 10px 0;">🚒 Fire Station ${stationNumber}</h5>`;
+        
+        const addresses = obj[stationNumber];
+        Object.keys(addresses).forEach(address => {
+          html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid #bee3f8; border-radius: 6px; background: white;">
+            <h6 style="margin: 0 0 8px 0;">📍 ${address}</h6>`;
+          
+          if (Array.isArray(addresses[address]) && addresses[address].length > 0) {
+            addresses[address].forEach(person => {
+              html += `<div style="margin: 5px 0; padding: 8px; border-left: 3px solid #4299e1; background: #f7fafc;">
+                <strong>${person.firstName} ${person.lastName}</strong> (${person.age} years old)
+                <br>📞 ${person.phone}
+                ${person.medications ? `<br>💊 ${person.medications}` : ''}
+                ${person.allergies ? `<br>⚠️ ${person.allergies}` : ''}
+              </div>`;
+            });
+          } else {
+            html += '<div style="color: #666;">No residents found</div>';
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+      });
+      return html;
+    }
+    
+    // Handle Firestation coverage data: { "persons": [...], "adultsCount": ..., "childrenCount": ... }
+    if (obj.persons && obj.adultsCount !== undefined) {
+      let html = `<div>
+        <h4>🚒 Fire Station Coverage Summary</h4>
+        <div style="display: flex; gap: 15px; margin: 15px 0;">
+          <div style="background: #667eea; color: white; padding: 15px; border-radius: 8px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold;">${obj.adultsCount}</div>
+            <div style="font-size: 12px;">Adults</div>
+          </div>
+          <div style="background: #f093fb; color: white; padding: 15px; border-radius: 8px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold;">${obj.childrenCount}</div>
+            <div style="font-size: 12px;">Children</div>
+          </div>
+        </div>
+      </div>`;
+      
+      if (obj.persons && obj.persons.length > 0) {
+        html += '<h4>👥 People Covered:</h4>';
+        obj.persons.forEach(person => {
+          html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <strong>${person.firstName} ${person.lastName}</strong>
+            <br>📍 ${person.address}
+            <br>📞 ${person.phone}
+          </div>`;
+        });
+      }
+      return html;
+    }
+    
+    return formatHumanReadable([obj]);
+  }
+  
+  return `<div>${obj}</div>`;
+}
+
+// Tab switching function
+function showTab(outputId, tabType) {
+  const tabs = document.querySelectorAll(`#${outputId} .tab-btn`);
+  tabs.forEach(tab => tab.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const panes = document.querySelectorAll(`#${outputId} .tab-pane`);
+  panes.forEach(pane => pane.classList.remove('active'));
+  document.getElementById(`${outputId}-${tabType}`).classList.add('active');
+}
 
 function fetchFirestation(){
   const station = document.getElementById('firestationNumber').value;
+  if (!station) { alert('Please enter a station number'); return; }
   fetch('/firestation?stationNumber=' + encodeURIComponent(station))
     .then(r => r.json())
-    .then(data => display(data, 'firestationOutput'));
+    .then(data => display(data, 'firestationOutput'))
+    .catch(error => document.getElementById('firestationOutput').textContent = 'Error: ' + error.message);
 }
+
 function fetchChildAlert(){
   const address = document.getElementById('childAddress').value;
+  if (!address) { alert('Please enter an address'); return; }
   fetch('/childAlert?address=' + encodeURIComponent(address))
     .then(r => r.json())
-    .then(data => display(data, 'childAlertOutput'));
+    .then(data => display(data, 'childAlertOutput'))
+    .catch(error => document.getElementById('childAlertOutput').textContent = 'Error: ' + error.message);
 }
+
 function fetchPhoneAlert(){
   const station = document.getElementById('phoneStation').value;
+  if (!station) { alert('Please enter a station number'); return; }
   fetch('/phoneAlert?firestation=' + encodeURIComponent(station))
     .then(r => r.json())
-    .then(data => display(data, 'phoneAlertOutput'));
+    .then(data => display(data, 'phoneAlertOutput'))
+    .catch(error => document.getElementById('phoneAlertOutput').textContent = 'Error: ' + error.message);
 }
+
 function fetchFireInfo(){
   const address = document.getElementById('fireAddress').value;
+  if (!address) { alert('Please enter an address'); return; }
   fetch('/fire?address=' + encodeURIComponent(address))
     .then(r => r.json())
-    .then(data => display(data, 'fireOutput'));
+    .then(data => display(data, 'fireOutput'))
+    .catch(error => document.getElementById('fireOutput').textContent = 'Error: ' + error.message);
 }
+
 function fetchFlood(){
   const stations = document.getElementById('floodStations').value;
+  if (!stations) { alert('Please enter station numbers'); return; }
   fetch('/flood/stations?stations=' + encodeURIComponent(stations))
     .then(r => r.json())
-    .then(data => display(data, 'floodOutput'));
+    .then(data => display(data, 'floodOutput'))
+    .catch(error => document.getElementById('floodOutput').textContent = 'Error: ' + error.message);
 }
+
 function fetchPersonInfo(){
   const first = document.getElementById('personFirstName').value;
   const last = document.getElementById('personLastName').value;
+  if (!first || !last) { alert('Please enter both first and last name'); return; }
   fetch('/personInfo?firstName=' + encodeURIComponent(first) + '&lastName=' + encodeURIComponent(last))
     .then(r => r.json())
-    .then(data => display(data, 'personInfoOutput'));
+    .then(data => display(data, 'personInfoOutput'))
+    .catch(error => document.getElementById('personInfoOutput').textContent = 'Error: ' + error.message);
 }
+
 function fetchCommunityEmail(){
   const city = document.getElementById('communityCity').value;
+  if (!city) { alert('Please enter a city name'); return; }
   fetch('/communityEmail?city=' + encodeURIComponent(city))
     .then(r => r.json())
-    .then(data => display(data, 'communityEmailOutput'));
+    .then(data => display(data, 'communityEmailOutput'))
+    .catch(error => document.getElementById('communityEmailOutput').textContent = 'Error: ' + error.message);
 }
+
+// Initialize API URLs when page loads
+window.addEventListener('load', function() {
+  updateAllApiUrls();
+});
 </script>
 </body>
 </html>

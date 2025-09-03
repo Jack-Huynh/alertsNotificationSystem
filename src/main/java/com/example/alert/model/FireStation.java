@@ -1,21 +1,34 @@
 package com.example.alert.model;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-//@Entity
+@Entity
+@Table(name = "fire_stations")
 @AllArgsConstructor
+@NoArgsConstructor
 public class FireStation {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "address", nullable = false)
     private String address;
+    
+    @Column(name = "station", nullable = false)
     private String station;
-    public FireStation() {
+
+    // Constructor for existing code compatibility
+    public FireStation(String address, String station) {
+        this.address = address;
+        this.station = station;
     }
 
-    @Override
-    public String toString() {
-        return station;
-    }
-
+    // Explicit getters and setters for compatibility
     public String getAddress() {
         return address;
     }
@@ -32,4 +45,16 @@ public class FireStation {
         this.station = station;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return station;
+    }
 }

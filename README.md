@@ -1,54 +1,167 @@
-# alertsNotificationSystem
+# SafetyNet Alerts System
 
-SafetyNet Alerts is an application written in Java using SpringBoot framework, designed to send emergency information to emergency responders. It provides various RestfulAPI endpoints to retrieve information about people, households, and fire stations, allowing emergency responders to access critical data quickly and efficiently.
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.java.net/)
+[![MapStruct](https://img.shields.io/badge/MapStruct-1.5.5-blue.svg)](https://mapstruct.org/)
+[![H2 Database](https://img.shields.io/badge/Database-H2-blue.svg)](http://www.h2database.com/)
 
-## Endpoints
+SafetyNet Alerts is a modern Spring Boot application designed to provide emergency information to first responders and emergency services. The system offers a comprehensive REST API with an interactive web interface for accessing critical data about people, households, and fire stations during emergency situations.
 
-### 1. Firestation Information
+## ✨ Features
 
-- **URL:** `/firestation?stationNumber=<station_number>`
-- **Description:** Returns a list of people serviced by the corresponding fire station. Includes first name, last name, address, and phone number of each person, along with a summary of the number of adults and children.
-  
-### 2. Child Alert
+- **🌐 Interactive Web Interface**: Modern, responsive HTML5 interface with tabbed output display
+- **📱 Mobile-Friendly Design**: Responsive grid layout that works on all devices
+- **🔄 Real-time API Testing**: Built-in API explorer with copy-to-clipboard functionality
+- **📊 Dual Output Formats**: Toggle between JSON and human-readable data presentation
+- **🗃️ In-Memory Database**: Fast H2 database with automatic schema generation
+- **🔧 Modern Architecture**: Clean separation of concerns with MapStruct for object mapping
+- **📋 API Documentation**: Built-in endpoint documentation with live URL generation
 
-- **URL:** `/childAlert?address=<address>`
-- **Description:** Returns a list of children (under 18 years old) at the specified address. Includes first and last name, age, and a list of other persons living at that address.
+## 🚀 Quick Start
 
-### 3. Phone Alert
+### Prerequisites
+- Java 17 or higher
+- Maven 3.6+
 
-- **URL:** `/phoneAlert?firestation=<firestation_number>`
-- **Description:** Returns a list of phone numbers of each person within the fire station's jurisdiction.
+### Running the Application
 
-### 4. Fire Information
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Jack-Huynh/alertsNotificationSystem.git
+   cd alertsNotificationSystem
+   ```
 
-- **URL:** `/fire?address=<address>`
-- **Description:** Returns the fire station number servicing the provided address, along with a list of all people living at the address. Includes name, phone number, age, medications with dosage, and allergies for each person.
+2. **Build and run**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
-### 5. Flood Stations
+3. **Access the application**
+   - Web Interface: [http://localhost:8080](http://localhost:8080)
+   - H2 Database Console: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
+   - Health Check: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
 
-- **URL:** `/flood/stations?stations=<list_of_station_numbers>`
-- **Description:** Returns a list of households in each fire station's jurisdiction. Groups people by household address and includes name, phone number, age, medications (with dosages), and allergies for each person.
+## 📚 API Endpoints
 
-### 6. Person Information
+### 🔥 Fire Station Services
 
-- **URL:** `/personInfo?firstName=<firstName>&lastName=<lastName>`
-- **Description:** Returns information about a person based on their first name and last name. Includes name, address, age, email, list of medications with dosages, and allergies. If there are multiple people with the same name, returns information for all of them.
+| Endpoint | Description | Example URL |
+|----------|-------------|-------------|
+| `/firestation` | Get people serviced by fire station | `http://localhost:8080/firestation?stationNumber=1` |
+| `/phoneAlert` | Get phone numbers for station jurisdiction | `http://localhost:8080/phoneAlert?firestation=2` |
+| `/fire` | Get fire station and residents for address | `http://localhost:8080/fire?address=123%20Main%20St` |
+| `/flood/stations` | Get households by station numbers | `http://localhost:8080/flood/stations?stations=1,2` |
 
-### 7. Community Email
+### 👨‍👩‍👧‍👦 Person & Community Services
 
-- **URL:** `/communityEmail?city=<city>`
-- **Description:** Returns the email addresses of all people in the specified city.
+| Endpoint | Description | Example URL |
+|----------|-------------|-------------|
+| `/childAlert` | Get children at specific address | `http://localhost:8080/childAlert?address=123%20Main%20St` |
+| `/personInfo` | Get detailed person information | `http://localhost:8080/personInfo?firstName=Alice&lastName=Smith` |
+| `/communityEmail` | Get all emails for city residents | `http://localhost:8080/communityEmail?city=HCM` |
 
-### Note
-- All endpoints return results in JSON format.
-- If an address or fire station number is not found within the data file, an empty JSON object is returned.
-- The application logs every request and response.
+### 📊 Response Formats
 
-## Architecture
+All endpoints support:
+- **JSON Format**: Standard REST API responses
+- **Human-Readable Format**: Formatted for easy reading (via web interface)
+- **Error Handling**: Appropriate HTTP status codes and error messages
 
-SafetyNet Alerts follows the Model-View-Controller (MVC) design pattern. It separates the model (data), view (presentation), and controller (business logic) components, following the SOLID principles to ensure maintainability and scalability. Also, a DTO(Data Transfer Object) design patterns is used to transfer data between different layers of an application.
+## 🏗️ Architecture
 
-## Unit Tests
+### Technology Stack
+- **Framework**: Spring Boot 3.2.0
+- **Database**: H2 In-Memory Database
+- **ORM**: Spring Data JPA
+- **Mapping**: MapStruct 1.5.5 for automatic object mapping
+- **Build Tool**: Maven
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript
 
-The application includes a set of unit tests to validate each of the requirements in Postman or any test applications of your choice.
+### Design Patterns & SOLID Principles
 
+#### 🏗️ **Design Patterns Used**
+- **MVC Pattern**: Clear separation of Model, View, and Controller layers
+- **DTO Pattern**: Data Transfer Objects for clean API contracts
+- **Repository Pattern**: Data access abstraction
+- **Service Layer Pattern**: Business logic encapsulation
+- **Mapper Pattern**: Automatic entity-DTO conversion with MapStruct
+- **Dependency Injection**: Loose coupling through Spring's IoC container
+
+#### 🎯 **SOLID Principles Applied**
+
+##### **S - Single Responsibility Principle (SRP)**
+```java
+// ✅ Each class has one responsibility
+@Controller - Handle HTTP requests only
+@Service - Business logic only  
+@Repository - Data access only
+@Entity - Data representation only
+```
+
+##### **O - Open/Closed Principle (OCP)**
+```java
+// ✅ MapStruct interfaces are open for extension, closed for modification
+@Mapper
+public interface PersonMapper {
+    PersonDTO toDTO(Person person);
+    // Can add new mapping methods without changing existing ones
+}
+```
+
+##### **L - Liskov Substitution Principle (LSP)**
+```java
+// ✅ Service implementations can be substituted without breaking functionality
+@Autowired
+private PersonService personService; // Any PersonService implementation works
+```
+
+##### **I - Interface Segregation Principle (ISP)**
+```java
+// ✅ Small, focused repositories instead of one large interface
+public interface PersonRepository { /* Person-specific methods only */ }
+public interface FireStationRepository { /* FireStation-specific methods only */ }
+```
+
+##### **D - Dependency Inversion Principle (DIP)**
+```java
+// ✅ Controllers depend on Service abstractions, not concrete implementations
+@Autowired
+private PersonService personService; // Depends on abstraction
+@Autowired 
+private FireStationService fireStationService; // Not concrete classes
+```
+
+### Project Structure
+```
+src/
+├── main/
+│   ├── java/com/example/alert/
+│   │   ├── controller/          # REST API Controllers
+│   │   ├── service/             # Business Logic Services
+│   │   ├── repository/          # Data Access Layer
+│   │   ├── model/               # JPA Entities
+│   │   │   └── DTO/             # Data Transfer Objects
+│   │   ├── mapper/              # MapStruct Mappers
+│   │   └── util/                # Utility Classes
+│   └── resources/
+│       ├── alerts-data.json     # Sample Data
+│       ├── application.properties
+│       └── static/
+│           └── index.html       # Interactive Web Interface
+└── test/                        # Unit Tests
+```
+
+## 🔧 Configuration
+
+## 📋 Sample Data
+
+The application loads sample data from `alerts-data.json` containing:
+- **Persons**: Alice Smith, Bob Johnson, Charlie Brown, David Williams, Eva Taylor, Frank Miller, Grace Miller, Henry Clark, Oliver Johnson, Sophie Smith
+- **Cities**: HCM, Halifax
+- **Fire Stations**: Station 1 (123 Main St, 789 Pine St), Station 2 (456 Oak St, 101 Elm St)
+- **Age Distribution**: Adults and children for testing child alert functionality
+
+### 📊 Test Data Examples
+- **Adults**: Alice Smith (32), Bob Johnson (27), David Williams (54), Eva Taylor (36), Frank Miller (22), Henry Clark (32)
+- **Children**: Charlie Brown (10), Grace Miller (10), Oliver Johnson (17), Sophie Smith (12)
+- **Addresses**: 123 Main St, 456 Oak St, 789 Pine St, 101 Elm St
